@@ -1,69 +1,23 @@
 ###################
-What is CodeIgniter
+SIPUSKOM
 ###################
 
-CodeIgniter is an Application Development Framework - a toolkit - for people
-who build web sites using PHP. Its goal is to enable you to develop projects
-much faster than you could if you were writing code from scratch, by providing
-a rich set of libraries for commonly needed tasks, as well as a simple
-interface and logical structure to access these libraries. CodeIgniter lets
-you creatively focus on your project by minimizing the amount of code needed
-for a given task.
+SIPUSKOM adalah sistem infomarsi dari UPT Puskom yang menyediakan fitur pendaftaran pelatihan baik yang ada di jadwal maupun yang direquest sendiri melalui pelatihan custom.
+Proses bisnis yang terjadi adalah:
+1. User melakukan pendaftaran melalui menu pendaftaran
+2. Bila user memiliki Telegram harap lakukan add friend dengan @uptpuskom_bot kemudian kirim /start untuk mendapatkan CHAT ID Telegram
+3. Setelah user mengisi data maka user akan menerima notifikasi baik berupa email dan telegram, demikian juga link akun yang didaftarkan di admin di tabel akun_sosial. Semua akun email dan telegram yang ada di tabel tersebut mendapat CC atau notifikasi bila ada user yang mendaftar pelatihan.
+4. Email atau telegram berisi ID Pembayaran yang bisa digunakan user untuk melakukan konfirmasi pembayaran.
+5. Setelah user mentransfer sejumlah biaya yang ada di email maupun telegram maka user bisa melakukan konfirmasi pembayaran dengan memasukkan ID Pembayaran dan Kode Transaksi pembayaran.
+6. Setelah user melakukan konfirmasi maka data tersebut akan diproses lebih lanjut oleh admin sistem.
+7. Setelah admin sistem mengecek transaksi dan memastikan pembayaran maka admin bisa melakukan konfirmasi untuk mengirim email notifikasi atau telegram bahwa Peserta sudah bisa login ke sistem melalui menu cek pembayaran.
+8. User akan mendapat email notifikasi bahwa sudah bisa login ke sistem.
+9. User bisa melakukan login melalui menu login menggunakan username berupa email.
+10. Pelatihan yang sudah dikonfirmasi tidak bisa diedit atau didelete.
+11. Bila user ingin menambah pelatihan baru dan kemudian ingin mengganti maka setiap perubahan akan diemail ke admin juga user.
+12. User bisa melakukan penambahan pelatihan kemudian pilih jadwal tersedia atau pelatihan custom (sedang dikembangkan).
 
-*******************
-Release Information
-*******************
-
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<http://www.codeigniter.com/download>`_ page.
-
-**************************
-Changelog and New Features
-**************************
-
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
-
-*******************
-Server Requirements
-*******************
-
-PHP version 5.4 or newer is recommended.
-
-It should work on 5.2.4 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
-
-************
-Installation
-************
-
-Please see the `installation section <http://www.codeigniter.com/user_guide/installation/index.html>`_
-of the CodeIgniter User Guide.
-
-*******
-License
-*******
-
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
-
-*********
-Resources
-*********
-
--  `User Guide <http://www.codeigniter.com/docs>`_
--  `Language File Translations <https://github.com/bcit-ci/codeigniter3-translations>`_
--  `Community Forums <http://forum.codeigniter.com/>`_
--  `Community Wiki <https://github.com/bcit-ci/CodeIgniter/wiki>`_
--  `Community IRC <http://www.codeigniter.com/irc>`_
-
-Report security issues to our `Security Panel <mailto:security@codeigniter.com>`_, thank you.
-
-***************
-Acknowledgement
-***************
-
-The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
+###################
+Catatan
+###################
+1. Untuk masuk ke menu admin bisa diakses ke localhost/sipuskom/Sadmin dengan username dan password admin
