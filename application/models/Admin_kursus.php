@@ -43,6 +43,15 @@ function tambah_akun_sosial($email,$chat_id_telegram)
 	$this->db->insert('akun_sosial',$data);
 }
 
+function tambah_rekening($no_rekening,$bank)
+{
+	$data = array(
+	'no_rekening'=>$no_rekening,
+	'bank'=>$bank
+	);
+	$this->db->insert('rekening',$data);
+}
+
 function delete($id)
 {
 	$this->db->delete('kursus', array('id'=>$id));
@@ -56,6 +65,11 @@ function delete_lab($id_lab)
 function delete_akun_sosial($id_akun)
 {
 	$this->db->delete('akun_sosial', array('id_akun'=>$id_akun));
+}
+
+function delete_rekening($id_akun)
+{
+	$this->db->delete('rekening', array('id_akun'=>$id_akun));
 }
 
 
@@ -86,6 +100,15 @@ function update_akun_sosial($id_akun,$email,$chat_id_telegram)
 	'chat_id_telegram'=>$chat_id_telegram
 	);
 	$this->db->where('id_akun',$id_akun)->update('akun_sosial', $data);
+}
+
+function update_rekening($id_akun,$no_rekening,$bank)
+{
+	$data = array(
+	'no_rekening'=>$no_rekening,
+	'bank'=>$bank
+	);
+	$this->db->where('id_akun',$id_akun)->update('rekening', $data);
 }
 
 function lock_kursus($id,$status)
@@ -120,6 +143,12 @@ function selectAkun($id_akun)
 {
 	return $this->db->get_where('akun_sosial', array('id_akun'=>$id_akun))->row();
 }
+
+function selectRekening($id_akun)
+{
+	return $this->db->get_where('rekening', array('id_akun'=>$id_akun))->row();
+}
+
 function getAkunSosial()
 {
 	$this->db->select('email,chat_id_telegram');

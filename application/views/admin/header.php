@@ -6,6 +6,8 @@
     <title>Sistem Informasi Pelatihan UPT Puskom UNDIP</title>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/gundar.jpg" />
     <!-- Bootstrap Styles-->
+    <link href="<?php echo base_url();?>assets/admin/css/jquery.dataTables.css" rel="stylesheet">
+
     <link href="<?php echo base_url();?>assets/admin/css/bootstrap.css" rel="stylesheet" />
      <!-- FontAwesome Styles-->
     <link href="<?php echo base_url();?>assets/admin/css/font-awesome.css" rel="stylesheet" />
@@ -27,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <img style="margin-top:10px" width="300" src="<?php echo base_url(); ?>assets/images/logo-undip.png"></img>
+                <img style="margin-top:5px" width="250" src="<?php echo base_url(); ?>assets/images/logo-undip.png"></img>
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
@@ -39,6 +41,9 @@
                         <li>
                             <a href="<?php echo base_url().'admin/welcome/logout'?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
+                        <li>
+                        <a href="<?php echo base_url(); ?>admin/welcome/ganti_password"><i class="fa fa-sign-out fa-fw"></i> Ganti Password</a>
+                      </li>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
@@ -62,6 +67,9 @@
                         <a href="<?php echo base_url();?>admin/welcome/kursus"><i class="fa fa-sitemap fa-fw"></i> Pelatihan</a>
                     </li>
                     <li>
+                        <a href="<?php echo base_url();?>admin/welcome/rekening"><i class="fa fa-sitemap fa-fw"></i> Rekening</a>
+                    </li>
+                    <li>
                         <a href="<?php echo base_url();?>admin/welcome/akun_sosial"><i class="fa fa-sitemap fa-fw"></i> Akun Sosial</a>
                     </li>
                 </ul>
@@ -79,6 +87,21 @@
                         <a href="<?php echo base_url();?>admin/welcome/cek_pembayaran"><i class="fa fa-sitemap fa-fw"></i> Cek Pembayaran </a>
                     </li>
                 </ul>
+                <li>
+                   <a href="<?php echo base_url(); ?>admin/welcome/report"><i class="fa fa-check fa-fw"></i> Report<span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level collapse">
+               <li>
+                   <a href="<?php echo base_url();?>admin/welcome/form_report_pemasukan"><i class="fa fa-sitemap fa-fw"></i> Report Pemasukan </a>
+               </li>
+               <!--
+               <li>
+                   <a href="<?php echo base_url();?>admin/welcome/report_pengeluaran"><i class="fa fa-sitemap fa-fw"></i> Report Pengeluaran </a>
+               </li>
+               <li>
+                   <a href="<?php echo base_url();?>admin/welcome/report_laba_rugi"><i class="fa fa-sitemap fa-fw"></i> Report Laba Rugi </a>
+               </li>
+             -->
+           </ul>
 
             </div>
 

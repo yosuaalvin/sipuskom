@@ -20,13 +20,14 @@
                       <tr>
                           <th>Nama</th>
                           <th>:</th>
-                          <th><input type="text" name="nama" value="<?php echo $dt_peserta->nama?>"></th>
+                          <th><input size="50" type="text" name="nama" value="<?php echo $dt_peserta->nama?>"></th>
                       </tr>
                       <tr>
                           <th>Institusi</th>
                           <th>:</th>
                           <th><input type="text" name="institusi" value="<?php echo $dt_peserta->institusi?>"></th>
                       </tr>
+                      <?php if ($dt_peserta->custom==0) {?>
                       <tr>
                           <th>Jenis Pelatihan</th>
                           <th>:</th>
@@ -40,11 +41,14 @@
                                         </select>
                                       </th>
                       </tr>
+                    <?php } elseif ($dt_peserta->custom==1) { ?>
                       <tr>
-                          <th>Harga Pelatihan</th>
+                          <th>Jenis Pelatihan</th>
                           <th>:</th>
-                          <th><input type="text" name="harga_pelatihan" value="<?php echo $dt_peserta->harga_pelatihan?>"></th>
+                          <th><input type="text" name="nm_kursus" value="<?php echo $dt_peserta->nm_kursus?>"></th>
                       </tr>
+                    <?php } ?>
+
                       <tr>
                           <th>Jumlah Peserta</th>
                           <th>:</th>
@@ -84,6 +88,7 @@
                           <th>No. HP / Telegram</th>
                           <th>:</th>
                           <th><input type="text" name="no_telp" value="<?php echo $dt_peserta->no_telp?>"></th>
+                          <input type="hidden" name="custom" value="<?php echo $dt_peserta->custom?>">
                       </tr>
                         </thead>
                     </table>
@@ -99,4 +104,3 @@
         </div>
         </div>
     </div>
-</div>

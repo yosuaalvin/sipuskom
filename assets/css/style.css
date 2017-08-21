@@ -4,6 +4,7 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 --*/
+
 html, body{
 font-family: 'Open Sans', sans-serif;
  font-size: 100%;
@@ -216,7 +217,7 @@ span.glyphicon.glyphicon-search.edit {
 	transition:0.5s;
 }
 .banner{
-	background:url(../images/laptop.jpg);
+	background:url(../images/ict-center.jpg);
 	background-size:cover;
 	min-height:650px;
 	padding-top:0em !important;
@@ -2640,4 +2641,5 @@ ul.p_n-list li a:hover{
   text-align:center;
   color:#fff;
 }
+
 /*--/responsive--*/

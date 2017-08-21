@@ -15,13 +15,13 @@
                 </div>
             <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
+            <table class="table table-striped table-bordered table-hover" id="example">
             <thead>
                 <tr class="danger">
                     <th><b>No</b></th>
                     <th><b>Email</b></th>
                     <th><b>Telegram Chat ID</b></th>
-                    <th><b>Aksi</b></th>                    
+                    <th><b>Aksi</b></th>
                     </tr>
             </thead>
             <tbody>
@@ -45,3 +45,12 @@
             </div>
         </div>
     </div>
+    <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script type="text/javascript   ">
+                $(document).ready( function () {
+                    $('#example').DataTable();
+                    //$( 'a' ).imageLightbox();
+                } );
+
+            </script>

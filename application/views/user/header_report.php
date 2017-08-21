@@ -28,7 +28,7 @@
 
     <!-- Custom Fonts -->
     <link href="<?php echo base_url(); ?>assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <!--<script src="<?php echo base_url();?>assets/js/jquery.dataTables.js"></script>-->
+    <script src="<?php echo base_url();?>assets/js/jquery.dataTables.js"></script>
 </head>
 
 <body>
@@ -44,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-<a style="display:inline-block;padding-left:5px;margin-top:10px;color:black;font-size:20px" href="<?php echo base_url(); ?>user/welcome/index"><img width="30" src="<?php echo base_url(); ?>assets/images/undip-logo.png"></img> UPT Puskom UNDIP</a>
+                <a style="display:inline-block;padding-left:5px;margin-top:10px;color:black;font-size:20px" href="<?php echo base_url(); ?>user/welcome/index"><img width="30" src="<?php echo base_url(); ?>assets/images/undip-logo.png"></img> UPT Puskom UNDIP</a>
             </div>
             <!-- /.navbar-header -->
             <ul class="nav navbar-top-links navbar-right">
@@ -56,9 +56,6 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="<?php echo base_url()?>user/welcome/logout"> <i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
-                        <li>
-                        <a href="<?php echo base_url(); ?>user/welcome/ganti_password"><i class="fa fa-sign-out fa-fw"></i> Ganti Password</a>
-                      </li>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
@@ -71,18 +68,10 @@
                    <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
 
-                        <li>
-                            <a href="<?php echo base_url(); ?>user/welcome/index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-                         <li>
-                            <a href="<?php echo base_url(); ?>user/welcome/kursus"><i class="fa fa-sitemap fa-fw"></i> Pelatihan<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level collapse">
-                              <li>
-                                 <a href="<?php echo base_url(); ?>user/welcome/daftar_peserta_kursus">List Pelatihan</a>
-                              </li>
-                              <li>
-                                  <a href="<?php echo base_url(); ?>user/welcome/kursus">Jadwal Pelatihan</a>
-                              </li>
+                      <li>
+                          <a href="<?php echo base_url(); ?>user/welcome/daftar_peserta_kursus"><i class="fa fa-dashboard fa-fw"></i> Back</a>
+                      </li>
+
                             </ul>
                         </li>
                     </ul>

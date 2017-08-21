@@ -35,6 +35,126 @@ class Welcome extends CI_Controller {
 			$this->load->view('konfirmasi');
 	}
 
+	public function lupa_password()
+	{
+			$this->load->view('header');
+			$this->load->view('lupa_password');
+	}
+
+	function lupa_password_proses()
+	{
+		if ($this->input->post('g-recaptcha-response'))
+		{
+			$secret = '6LebdC0UAAAAAPUXsf9doTvr317GHu2pA_Ii4x9l';
+			//get verify response data
+			$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+			$responseData = json_decode($verifyResponse);
+			if($responseData->success)
+			{
+				$email=$this->input->post('email');
+				$berhasil = $this->m_kursus->get_lupa_password($email);
+				if ($berhasil)
+				{
+				$data['email'] = $email;
+				$data['pertanyaan'] = $this->m_kursus->get_pertanyaan();
+				$this->load->view('header');
+				$this->load->view('lupa_password_pertanyaan',$data);
+			  }
+				else
+				{
+					$this->load->view('header');
+					$this->load->view('lupa_password_gagal');
+				}
+			}
+		}
+			else
+			{
+				echo '<script>
+				alert("Mohon Maaf recaptcha belum ditekan");
+				history.go(-1);
+				</script>';
+			}
+	}
+
+	function lupa_password_proses_pertanyaan()
+	{
+				$email=$this->input->post('email');
+				$id_pertanyaan=$this->input->post('id_pertanyaan');
+				$jawaban_pertanyaan=$this->input->post('jawaban_pertanyaan');
+				$berhasil = $this->m_kursus->get_cek_jawaban_pertanyaan($email,$id_pertanyaan,$jawaban_pertanyaan);
+				$password_asli = substr(md5(uniqid(rand(), true)), 16, 16);
+				$npm = $password_asli;
+				$password = md5($npm);
+				$pengguna = $this->m_kursus->selectLastPelatihan($email);
+				$chat_id = $pengguna->chat_id;
+				$nm_pengguna = $pengguna->nama;
+				if ($berhasil)
+				{
+					$berhasilmasuk = $this->m_kursus->ganti_password($email,$npm,$password);
+          if ($berhasilmasuk)
+					{
+					$messagedikirim = 'Anda telah berhasil mengganti password anda menjadi '.$npm.'.';
+
+					$mail             = new PHPMailer();
+					$mail->IsSMTP(); // telling the class to use SMTP
+					//$mail->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
+																										 // 1 = errors and messages
+																										 // 2 = messages only
+					$mail->SMTPAuth   = true;                  // enable SMTP authentication
+					$mail->SMTPSecure = "tls";
+					$mail->Host       = "smtp.gmail.com";      // SMTP server
+					$mail->Port       = 587;                   // SMTP port
+					$mail->Username   = "yosua@live.undip.ac.id";  // username
+					$mail->Password   = "S3m4r4ng";            // password
+
+					$mail->SetFrom('upt_puskom@undip.ac.id', 'UPT Puskom UNDIP');
+
+					$mail->Subject    = "Reset Password User";
+					$mail->MsgHTML($messagedikirim);
+
+					$mail->AddAddress($email, $nm_pengguna);
+					$mail->Send();
+					//$mail->AddAddress('upt_puskom@undip.ac.id','CC ke Puskom');
+					//Telegram
+					$token = "bot412746341:AAEpSzMlVa7LRk3zEf4EKgouyRgh7c2LBTU";
+					//$chatid = "293078439";
+
+					if ($chat_id!='')
+					{
+					$url = "https://api.telegram.org/" . $token . "/sendMessage?chat_id=" . $chat_id;
+					$url = $url . "&text=" . urlencode($messagedikirim);
+							$ch = curl_init();
+							$optArray = array(
+							        CURLOPT_URL => $url,
+							        CURLOPT_RETURNTRANSFER => true
+							);
+							curl_setopt_array($ch, $optArray);
+							$telegram = curl_exec($ch);
+							curl_close($ch);
+					}
+					if($berhasilmasuk)
+					{
+						echo '<script>
+						alert("Anda Sudah Berhasil Mengganti Password Anda");
+						window.location="'. site_url('welcome') . '";
+						</script>';
+					}
+					else
+					{
+						echo '<script>
+						alert("Mohon maaf anda belum berhasil mengganti Password Anda");
+						window.location="'. site_url('welcome/lupa_password') . '";
+						</script>';
+					}
+					}
+				}
+				else {
+					echo '<script>
+					alert("Mohon maaf anda belum berhasil mengganti Password Anda");
+					window.location="'. site_url('welcome/lupa_password') . '";
+					</script>';
+				}
+		}
 	function kursus()
 	{
 	  $id=$this->uri->segment(7);
@@ -77,20 +197,33 @@ class Welcome extends CI_Controller {
 				$alamat=$this->input->post('alamat');
 				$no_telp=$this->input->post('no_telp');
 				$custom=$this->input->post('custom');
-				$id_pembayaran = substr(md5(uniqid(rand(), true)), 16, 16);
+				$id_pembayaran = substr(md5(uniqid(rand(), true)), 4, 4);
+				$rekening = $this->m_kursus->get_rekening();
+				$no_rekening = $rekening->no_rekening;
+				$bank = $rekening->bank;
 				$id_pertanyaan=$this->input->post('id_pertanyaan');
 				$jawaban_pertanyaan=$this->input->post('jawaban_pertanyaan');
+				if ($this->input->post('g-recaptcha-response'))
+				{
+					$secret = '6LebdC0UAAAAAPUXsf9doTvr317GHu2pA_Ii4x9l';
+					//get verify response data
+					$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+					$responseData = json_decode($verifyResponse);
+					if($responseData->success)
+					{
         $berhasil = $this->m_kursus->tambah_peserta_pelatihan($nm_peserta,$institusi,$nm_kursus,$harga_pelatihan,$kuota,$periode,$email,$chat_id,$password,$tempat_lahir,$tanggal_lahir,$alamat,$no_telp,$id_pembayaran,$id_pertanyaan,$jawaban_pertanyaan,$custom);
 				//Email
 				if ($berhasil)
 				{
 				if ($custom==0)
 				{
-				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Berikut merupakan ID Pembayaran yang bisa anda gunakan untuk verifikasi pembayaran. Verifikasi Pembayaran dilakukan dengan memasukkan ID Pembayaran yaitu '. $id_pembayaran . ' dan juga harap masukkan nomor transaksi dari transfer Bank anda.';
+				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Biaya yang harus dibayarkan sebesar Rp. ' . number_format($kuota*$harga_pelatihan,0, ',' , '.').', bisa dilakukan pembayaran pada rekening <b>'. $bank . '</b> dengan No. Rekening <b>' . $no_rekening . '</b>. Verifikasi Pembayaran dilakukan dengan memasukkan ID Pembayaran yaitu <b> '. $id_pembayaran . ' </b> dan juga harap masukkan <b> nomor transaksi </b> dari transfer Bank anda.';
+				$messagedikirimtele = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Biaya yang harus dibayarkan sebesar Rp. ' . number_format($kuota*$harga_pelatihan,0, ',' , '.').', bisa dilakukan pembayaran pada rekening ' . $bank . ' dengan No. Rekening ' . $no_rekening . '. Verifikasi Pembayaran dilakukan dengan memasukkan ID Pembayaran yaitu '. $id_pembayaran . ' dan juga harap masukkan nomor transaksi dari transfer Bank anda.';
 				}
 				elseif ($custom==1)
 				{
-				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan Custom ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Berikut merupakan ID Pembayaran yang bisa anda gunakan untuk verifikasi pembayaran. Untuk pelatihan custom harap menunggu penawaran harga dari kami yang akan dikirim melalui email dan telegram. Bila sudah setuju dengan penawaran kami silahkan melakukan verifikasi pembayaran dengan memasukkan ID Pembayaran yaitu '. $id_pembayaran . ' dan juga harap masukkan nomor transaksi dari transfer Bank anda.';
+				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan Custom ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Untuk pelatihan custom harap menunggu penawaran harga dari kami yang akan dikirim melalui email dan telegram. Bila sudah setuju dengan penawaran kami silahkan melakukan verifikasi pembayaran dengan memasukkan ID Pembayaran yaitu <b> '. $id_pembayaran . ' </b> dan juga harap masukkan nomor transaksi dari transfer Bank anda.';
+				$messagedikirimtele = 'Terima Kasih '.$nm_peserta.' Telah Mendaftar Pelatihan Custom ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan kuota peserta ' . $kuota . ' orang di UPT Puskom UNDIP. Untuk pelatihan custom harap menunggu penawaran harga dari kami yang akan dikirim melalui email dan telegram. Bila sudah setuju dengan penawaran kami silahkan melakukan verifikasi pembayaran dengan memasukkan ID Pembayaran yaitu '. $id_pembayaran . ' dan juga harap masukkan nomor transaksi dari transfer Bank anda.';
 				}
 				$mail             = new PHPMailer();
 				$mail->IsSMTP(); // telling the class to use SMTP
@@ -102,7 +235,7 @@ class Welcome extends CI_Controller {
 				$mail->Host       = "smtp.gmail.com";      // SMTP server
 				$mail->Port       = 587;                   // SMTP port
 				$mail->Username   = "yosua@live.undip.ac.id";  // username
-				$mail->Password   = "S3m4r4ng123";            // password
+				$mail->Password   = "S3m4r4ng";            // password
 
 				$mail->SetFrom('upt_puskom@undip.ac.id', 'UPT Puskom UNDIP');
 
@@ -115,6 +248,7 @@ class Welcome extends CI_Controller {
 				{
 				$mail->AddAddress($emailsent['email'],'CC ke Puskom');
 				}
+				$mail->Send();
 				//$mail->AddAddress('upt_puskom@undip.ac.id','CC ke Puskom');
 				//Telegram
 				$token = "bot412746341:AAEpSzMlVa7LRk3zEf4EKgouyRgh7c2LBTU";
@@ -123,7 +257,7 @@ class Welcome extends CI_Controller {
 				foreach ($data['telegram'] as $telegramsent)
 				{
 				$url = "https://api.telegram.org/" . $token . "/sendMessage?chat_id=" . $telegramsent['chat_id_telegram'];
-				$url = $url . "&text=" . urlencode($messagedikirim);
+				$url = $url . "&text=" . urlencode($messagedikirimtele);
 				    $ch = curl_init();
 				    $optArray = array(
 				            CURLOPT_URL => $url,
@@ -136,7 +270,7 @@ class Welcome extends CI_Controller {
 				if ($chat_id!='')
 				{
 				$url = "https://api.telegram.org/" . $token . "/sendMessage?chat_id=" . $chat_id;
-				$url = $url . "&text=" . urlencode($messagedikirim);
+				$url = $url . "&text=" . urlencode($messagedikirimtele);
 						$ch = curl_init();
 						$optArray = array(
 						        CURLOPT_URL => $url,
@@ -146,35 +280,15 @@ class Welcome extends CI_Controller {
 						$telegram = curl_exec($ch);
 						curl_close($ch);
 				}
-				if($mail->Send() && !$telegram)
-				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan registrasi namun pesan telegram tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else if (!$mail->Send() && $telegram)
-				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan registrasi namun pesan email tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else if ($mail->Send() && $telegram)
+				if($berhasil)
 				{
 					echo '<script>
 					alert("Anda Sudah Berhasil Melakukan registrasi");
 					window.location="'. site_url('welcome') . '";
 					</script>';
 				}
-				else if (!$mail->Send() && !$telegram)
+				else
 				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan registrasi namun pesan email dan telegram tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else {
 					echo '<script>
 					alert("Mohon maaf anda belum berhasil melakukan registrasi");
 					window.location="'. site_url('welcome/pendaftaran') . '";
@@ -188,12 +302,28 @@ class Welcome extends CI_Controller {
 				window.location="'. site_url('welcome/pendaftaran') . '";
 				</script>';
 			}
+		}
+	}
+		else {
+			echo '<script>
+			alert("Mohon Maaf recaptcha belum ditekan");
+			history.go(-1);
+			</script>';
+				}
   }
 
 	public function konfirmasi_pembayaran()
 	{
 				$id_pembayaran=$this->input->post('id_pembayaran');
 				$no_transaksi=$this->input->post('no_transaksi');
+				if ($this->input->post('g-recaptcha-response'))
+				{
+					$secret = '6LebdC0UAAAAAPUXsf9doTvr317GHu2pA_Ii4x9l';
+					//get verify response data
+					$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+					$responseData = json_decode($verifyResponse);
+					if($responseData->success)
+					{
 				$data['peserta'] = $this->m_kursus->konfirmasi_pembayaran($id_pembayaran,$no_transaksi);
         foreach ($data['peserta'] as $peserta)
 				{
@@ -201,6 +331,7 @@ class Welcome extends CI_Controller {
 					$nm_kursus = $peserta['nm_kursus'];
 					$periode = $peserta['periode'];
 					$chat_id = $peserta['chat_id'];
+					$email = $peserta['email'];
 				}
 				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Melakukan Verifikasi Pembayaran dengan ID ' . $id_pembayaran . ' dengan No. Transaksi ' . $no_transaksi . ' untuk Pelatihan ' . $nm_kursus . ' untuk tanggal ' . $periode . '. Silahkan menunggu email konfirmasi dari kami yang berisi notifikasi bahwa anda sudah bisa login ke sistem kami.';
 
@@ -214,7 +345,7 @@ class Welcome extends CI_Controller {
 				$mail->Host       = "smtp.gmail.com";      // SMTP server
 				$mail->Port       = 587;                   // SMTP port
 				$mail->Username   = "yosua@live.undip.ac.id";  // username
-				$mail->Password   = "S3m4r4ng123";            // password
+				$mail->Password   = "S3m4r4ng";            // password
 
 				$mail->SetFrom('upt_puskom@undip.ac.id', 'UPT Puskom UNDIP');
 
@@ -228,6 +359,7 @@ class Welcome extends CI_Controller {
 				{
 				$mail->AddAddress($emailsent['email'],'CC ke Puskom');
 				}
+				$mail->Send();
 				//$mail->AddAddress('upt_puskom@undip.ac.id','CC ke Puskom');
 				//Telegram
 				$token = "bot412746341:AAEpSzMlVa7LRk3zEf4EKgouyRgh7c2LBTU";
@@ -259,41 +391,28 @@ class Welcome extends CI_Controller {
 					  $telegram = curl_exec($ch);
 					  curl_close($ch);
 				}
-				if($mail->Send() && !$telegram)
-				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan Konfirmasi Pembayaran namun pesan telegram tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else if (!$mail->Send() && $telegram)
-				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan Konfirmasi Pembayaran namun pesan email tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else if ($mail->Send() && $telegram)
+				if($nm_peserta)
 				{
 					echo '<script>
 					alert("Anda Sudah Berhasil Melakukan Konfirmasi Pembayaran");
 					window.location="'. site_url('welcome') . '";
 					</script>';
 				}
-				else if (!$mail->Send() && !$telegram)
+				else
 				{
-					echo '<script>
-					alert("Anda Sudah Berhasil Melakukan Konfirmasi Pembayaran namun pesan email dan telegram tidak terkirim");
-					window.location="'. site_url('welcome') . '";
-					</script>';
-				}
-				else {
 					echo '<script>
 					alert("Mohon maaf anda belum berhasil melakukan konfirmasi pembayaran");
 					window.location="'. site_url('welcome/konfirmasi') . '";
 					</script>';
 				}
-
+			}
+		}
+			else {
+				echo '<script>
+				alert("Mohon Maaf recaptcha belum ditekan");
+				history.go(-1);
+				</script>';
+					}
 			}
 
 

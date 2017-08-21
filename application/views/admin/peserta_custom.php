@@ -14,7 +14,7 @@
                 </div>
             <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover" >
+            <table class="table table-striped table-bordered table-hover" id="example">
             <thead>
                 <tr class="danger">
                     <th><b>No</b></th>
@@ -39,7 +39,9 @@
               <td><?php echo $b->periode?></td>
               <td><a href="<?php echo base_url();?>admin/welcome/ubah_ps_custom/<?php echo $b->id;?>" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></span></a>
               <a href="<?php echo base_url();?>admin/welcome/hapus_ps/<?php echo $b->id;?>" onClick="return checkMe()" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-trash"></span></a>
-                    </td>
+              <a href="<?php echo base_url();?>admin/welcome/cetak_kartu/<?php echo $b->id;?>" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-edit"></span> Cetak</a>
+
+              </td>
             <?php endforeach?>
             </tbody>
             </tr>
@@ -49,3 +51,12 @@
             </div>
         </div>
     </div>
+    <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script type="text/javascript   ">
+                $(document).ready( function () {
+                    $('#example').DataTable();
+                    //$( 'a' ).imageLightbox();
+                } );
+
+            </script>

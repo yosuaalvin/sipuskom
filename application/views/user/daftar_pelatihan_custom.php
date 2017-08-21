@@ -11,7 +11,7 @@
             Silahkan mengisi formulir pendaftaran
             </div>
             <div class="panel-body">
-            <?php echo form_open_multipart('user/welcome/daftar_peserta');?>
+            <?php echo form_open_multipart('user/welcome/daftar_peserta_custom');?>
             <div class="form-group">
             <table class="table" border=1>
             <div class="table-responsive">
@@ -29,23 +29,9 @@
                           <th><input type="text" name="institusi" value="<?php echo $dt_peserta->institusi?>"></th>
                       </tr>
                       <tr>
-                          <th>Jenis Pelatihan</th>
+                          <th>Pelatihan Custom</th>
                           <th>:</th>
-                          <th><select name="nm_kursus">
-                                          <option value="">Pilih Pelatihan</option>
-                                          <?php
-                                          $no=1;
-                                          foreach($kursus as $k):?>
-                                          <option value="<?php echo $k->nama_kursus; ?>" <?php if ($kursus_dipilih->nama_kursus) { if ($kursus_dipilih->nama_kursus==$k->nama_kursus) { echo "selected";} else {echo "";}} ?>><?php echo $k->nama_kursus; ?></option>
-                                          <?php endforeach; ?>
-                                        </select>
-                                      </th>
-                      </tr>
-                      <tr>
-                          <th>Harga Pelatihan</th>
-                          <th>:</th>
-                          <th><input type="text" name="harga_pelatihan_tampil" value="<?php echo 'Rp. ' . number_format($kursus_dipilih->harga,0, ',' , '.')?>"></th>
-                          <input type="hidden" name="harga_pelatihan" value="<?php echo $kursus_dipilih->harga?>">
+                          <th><input type="text" name="nm_kursus" value=""></th>
                       </tr>
                       <tr>
                           <th>Jumlah Peserta</th>
@@ -55,7 +41,7 @@
                       <tr>
                           <th>Periode</th>
                           <th>:</th>
-                          <th><input type="date" name="periode" value="<?php echo $kursus_dipilih->periode?>"></th>
+                          <th><input type="date" name="periode" value=""></th>
                       </tr>
                           <input type="hidden" name="email" value="<?php echo $dt_peserta->email?>">
                           <input type="hidden" name="chat_id" value="<?php echo $dt_peserta->chat_id?>">
@@ -69,7 +55,7 @@
             </div><hr>
                      <input type="submit" class="btn btn-primary" value="Daftar" name="submit"/>
                      <input type="button" class="btn btn-primary" value="Back" onclick="location.href='<?php echo base_url();?>user/welcome/kursus'">
-                    <?php echo form_close();?>
+                     <?php echo form_close();?>
             </div>
             </div>
             </div>

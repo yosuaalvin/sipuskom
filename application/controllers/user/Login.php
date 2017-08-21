@@ -40,7 +40,7 @@
                             $data_user['username']    = $c->username;
                             $data_user['id_user']     = $c->id_user;
                             $data_user['nama']        = $c->nama;
-                            $data_user['kelas']       = $c->kelas;
+                            //$data_user['kelas']       = $c->kelas;
                             $data_user['level']       = $c->level;
 
                         }

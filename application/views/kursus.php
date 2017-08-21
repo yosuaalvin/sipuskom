@@ -24,7 +24,7 @@ foreach($kursus as $b):?>
   <td><?php echo $no++?></td>
   <td><?php echo $b->nama_kursus?></td>
   <td><?php echo $b->laboratorium?></td>
-  <td><?php echo $b->harga?></td>
+  <td><?php echo 'Rp. ' . number_format($b->harga,0, ',' , '.');?></td>
   <td><?php echo $b->kuota?></td>
   </span></a>
   </td>

@@ -14,7 +14,7 @@
                 </div>
             <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover" >
+            <table class="table table-striped table-bordered table-hover" id="example">
             <thead>
                 <tr class="danger">
                     <th><b>No</b></th>
@@ -40,7 +40,7 @@
               <td><?php echo $b->no_telp?></td>
               <td><?php echo $b->nm_kursus?></td>
               <td><?php echo $b->periode?></td>
-              <td><?php echo $b->harga_pelatihan?></td>
+              <td><?php echo 'Rp. ' . number_format($b->harga_pelatihan,0, ',' , '.');?></td>
               <td><?php echo $b->id_pembayaran?></td>
               <td><?php echo $b->no_transaksi?></td>
               <td><a href="<?php echo base_url();?>admin/welcome/ubah_cek_pembayaran/<?php echo $b->id;?>/<?php echo $b->id_user;?>" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></span></a>
@@ -54,3 +54,12 @@
             </div>
         </div>
     </div>
+    <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script type="text/javascript   ">
+                $(document).ready( function () {
+                    $('#example').DataTable();
+                    //$( 'a' ).imageLightbox();
+                } );
+
+            </script>

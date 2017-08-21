@@ -78,6 +78,16 @@ class Welcome extends CI_Controller {
     $this->load->view('admin/footer');
   }
 
+  function tambah_data_rekening()
+  {
+    //$data['kursus']=$this->admin_kursus->tambah_kursus();
+    $user = $this->session->userdata('username');
+    $this->data['pengguna'] = $this->m_login->data($user);
+    $this->load->view('admin/header',$this->data);
+    $this->load->view('admin/form_tambah_rekening');
+    $this->load->view('admin/footer');
+  }
+
   function tambah_kursus()
   {
     $nama_kursus=$this->input->post('nama_kursus');
@@ -104,6 +114,14 @@ class Welcome extends CI_Controller {
     redirect('admin/welcome/akun_sosial');
   }
 
+  function tambah_rekening()
+  {
+    $no_rekening=$this->input->post('no_rekening');
+    $bank=$this->input->post('bank');
+    $this->admin_kursus->tambah_rekening($no_rekening,$bank);
+    redirect('admin/welcome/rekening');
+  }
+
   function hapus($id)
   {
         $this->admin_kursus->delete($id);
@@ -119,6 +137,12 @@ class Welcome extends CI_Controller {
   {
         $this->admin_kursus->delete_akun_sosial($id_akun);
         redirect('admin/welcome/akun_sosial');
+  }
+
+  function hapus_rekening($id_akun)
+  {
+        $this->admin_kursus->delete_rekening($id_akun);
+        redirect('admin/welcome/rekening');
   }
 
   function ubah($id)
@@ -174,6 +198,22 @@ class Welcome extends CI_Controller {
         }
   }
 
+  function ubah_rekening($id_akun)
+  {
+        if($_POST==NULL) {
+            $data['rekening'] = $this->admin_kursus->selectRekening($id_akun);
+            $user = $this->session->userdata('username');
+            $this->data['pengguna'] = $this->m_login->data($user);
+            $this->load->view('admin/header',$this->data);
+            $this->load->view('admin/edit_form_tambah_rekening',$data);
+            $this->load->view('admin/footer');
+        }else {
+            $no_rekening=$this->input->post('no_rekening');
+            $bank=$this->input->post('bank');
+            $this->admin_kursus->update_rekening($id_akun,$no_rekening,$bank);
+            redirect('admin/welcome/rekening');
+        }
+  }
 
   function ubah_cek_pembayaran($id,$id_user)
   {
@@ -195,7 +235,7 @@ class Welcome extends CI_Controller {
             $periode=$this->input->post('periode');
             $email=$this->input->post('email');
             $chat_id=$this->input->post('chat_id');
-            $messagedikirim = 'Terima Kasih '.$nama.' Telah Melakukan Konfirmasi Pembayaran ID ' . $id_pembayaran . ' dengan nomor transaksi ' . $no_transaksi . ' untuk Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan harga pelatihan ' . $harga_pelatihan . ' dan kuota peserta ' . $kuota . '. Silahkan login untuk memastikan bahwa anda telah berhasil registrasi dan masuk ke sistem kami.';
+            $messagedikirim = 'Terima Kasih '.$nama.' Telah Melakukan Konfirmasi Pembayaran ID ' . $id_pembayaran . ' dengan nomor transaksi ' . $no_transaksi . ' untuk Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ' dengan harga pelatihan Rp. ' . number_format($kuota*$harga_pelatihan,0, ',' , '.').'. dan kuota peserta ' . $kuota . '. Silahkan login untuk memastikan bahwa anda telah berhasil registrasi dan masuk ke sistem kami.';
             if ($berhasil)
             {
     				$mail             = new PHPMailer();
@@ -208,7 +248,7 @@ class Welcome extends CI_Controller {
     				$mail->Host       = "smtp.gmail.com";      // SMTP server
     				$mail->Port       = 587;                   // SMTP port
     				$mail->Username   = "yosua@live.undip.ac.id";  // username
-    				$mail->Password   = "S3m4r4ng123";            // password
+    				$mail->Password   = "S3m4r4ng";            // password
 
     				$mail->SetFrom('upt_puskom@undip.ac.id', 'UPT Puskom UNDIP');
 
@@ -221,6 +261,7 @@ class Welcome extends CI_Controller {
             {
             $mail->AddAddress($emailsent['email'],'CC ke Puskom');
             }
+            $mail->Send();
     				//$mail->AddAddress('upt_puskom@undip.ac.id','CC ke Puskom');
     				//Telegram
     				$token = "bot412746341:AAEpSzMlVa7LRk3zEf4EKgouyRgh7c2LBTU";
@@ -252,31 +293,17 @@ class Welcome extends CI_Controller {
     					  $telegram = curl_exec($ch);
     					  curl_close($ch);
     				}
-    				if($mail->Send() && !$telegram)
-    				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengaktikan Peserta namun pesan telegram tidak terkirim");
-              window.location="'. site_url('admin/welcome/cek_pembayaran') . '";
-    					</script>';
-    				}
-            else if (!$mail->Send() && $telegram)
-    				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengaktifkan Peserta namun pesan email tidak terkirim");
-    					window.location="'. site_url('admin/welcome/cek_pembayaran') . '";
-    					</script>';
-    				}
-    				else if ($mail->Send() && $telegram)
+    				if($berhasil)
     				{
     					echo '<script>
     					alert("Anda Sudah Berhasil Mengaktifkan Peserta");
     					window.location="'. site_url('admin/welcome/cek_pembayaran') . '";
     					</script>';
     				}
-    				else if (!$mail->Send() && !$telegram)
+    				else
     				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengaktifkan Peserta namun pesan email dan telegram tidak terkirim");
+              echo '<script>
+    					alert("Mohon maaf anda belum berhasil mengaktifkan peserta");
     					window.location="'. site_url('admin/welcome/cek_pembayaran') . '";
     					</script>';
     				}
@@ -349,6 +376,17 @@ function unlock_kursus($id){
     $this->load->view('admin/footer');
   }
 
+  function rekening()
+  {
+    $query = $this->admin_peserta->selectRekening();
+    $data['rekening']=$query;
+    $user = $this->session->userdata('username');
+    $this->data['pengguna'] = $this->m_login->data($user);
+    $this->load->view('admin/header',$this->data);
+    $this->load->view('admin/rekening',$data);
+    $this->load->view('admin/footer');
+  }
+
   function hapus_ps($id)
   {
         $this->admin_peserta->delete($id);
@@ -406,9 +444,12 @@ function unlock_kursus($id){
             $alamat=$this->input->post('alamat');
             $no_telp=$this->input->post('no_telp');
             $id_pembayaran=$this->input->post('id_pembayaran');
-            $this->admin_peserta->update_custom($id,$nama,$institusi,$nm_kursus,$harga_pelatihan,$kuota,$periode,$email,$chat_id,$tempat_lahir,$tanggal_lahir,$alamat,$no_telp);
-            $messagedikirim = 'Terima Kasih '.$nama.' Telah Mendaftar Pelatihan Custom dengan ID ' . $id_pembayaran . ' untuk Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . '. Kami menawarkan harga pelatihan sebesar ' . $harga_pelatihan. '. Bila anda telah setuju silahkan melakukan konfirmasi pembayaran dan bila ingin menghubungi kami lebih lanjut bisa langsung chatting di bagian Click to chat.';
-
+            $rekening = $this->m_kursus->get_rekening();
+            $no_rekening = $rekening->no_rekening;
+            $bank = $rekening->bank;
+            $berhasil = $this->admin_peserta->update_custom($id,$nama,$institusi,$nm_kursus,$harga_pelatihan,$kuota,$periode,$email,$chat_id,$tempat_lahir,$tanggal_lahir,$alamat,$no_telp);
+            $messagedikirim = 'Terima Kasih '.$nama.' Telah Mendaftar Pelatihan Custom dengan ID <b>' . $id_pembayaran . '</b> untuk Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ', bisa dilakukan pembayaran pada rekening <b>'. $bank . '</b> dengan No. Rekening <b>' . $no_rekening . '</b>. Kami menawarkan harga pelatihan sebesar Rp. ' . number_format($kuota*$harga_pelatihan,0, ',' , '.').'. Bila anda telah setuju silahkan melakukan konfirmasi pembayaran dan bila ingin menghubungi kami lebih lanjut bisa langsung chatting di bagian Click to chat.';
+            $messagedikirimtele = 'Terima Kasih '.$nama.' Telah Mendaftar Pelatihan Custom dengan ID ' . $id_pembayaran . ' untuk Pelatihan ' . $nm_kursus . ' pada tanggal ' . $periode . ', bisa dilakukan pembayaran pada rekening '. $bank . ' dengan No. Rekening ' . $no_rekening . '. Kami menawarkan harga pelatihan sebesar Rp. ' . number_format($kuota*$harga_pelatihan,0, ',' , '.').'. Bila anda telah setuju silahkan melakukan konfirmasi pembayaran dan bila ingin menghubungi kami lebih lanjut bisa langsung chatting di bagian Click to chat.';
     				$mail             = new PHPMailer();
     				$mail->IsSMTP(); // telling the class to use SMTP
     				//$mail->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
@@ -419,7 +460,7 @@ function unlock_kursus($id){
     				$mail->Host       = "smtp.gmail.com";      // SMTP server
     				$mail->Port       = 587;                   // SMTP port
     				$mail->Username   = "yosua@live.undip.ac.id";  // username
-    				$mail->Password   = "S3m4r4ng123";            // password
+    				$mail->Password   = "S3m4r4ng";            // password
 
     				$mail->SetFrom('upt_puskom@undip.ac.id', 'UPT Puskom UNDIP');
 
@@ -432,6 +473,7 @@ function unlock_kursus($id){
             {
             $mail->AddAddress($emailsent['email'],'CC ke Puskom');
             }
+            $mail->Send();
     				//$mail->AddAddress('upt_puskom@undip.ac.id','CC ke Puskom');
     				//Telegram
     				$token = "bot412746341:AAEpSzMlVa7LRk3zEf4EKgouyRgh7c2LBTU";
@@ -440,7 +482,7 @@ function unlock_kursus($id){
             foreach ($data['telegram'] as $telegramsent)
             {
     				$url = "https://api.telegram.org/" . $token . "/sendMessage?chat_id=" . $telegramsent['chat_id_telegram'];
-    				$url = $url . "&text=" . urlencode($messagedikirim);
+    				$url = $url . "&text=" . urlencode($messagedikirimtele);
     				    $ch = curl_init();
     				    $optArray = array(
     				            CURLOPT_URL => $url,
@@ -453,7 +495,7 @@ function unlock_kursus($id){
     				if ($chat_id!='')
     				{
     				$url = "https://api.telegram.org/" . $token . "/sendMessage?chat_id=" . $chat_id;
-    				$url = $url . "&text=" . urlencode($messagedikirim);
+    				$url = $url . "&text=" . urlencode($messagedikirimtele);
     				    $ch = curl_init();
     					  $optArray = array(
     					          CURLOPT_URL => $url,
@@ -463,31 +505,10 @@ function unlock_kursus($id){
     					  $telegram = curl_exec($ch);
     					  curl_close($ch);
     				}
-    				if($mail->Send() && !$telegram)
-    				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengkonfirmasi Pelatihan Custom namun pesan telegram tidak terkirim");
-              window.location="'. site_url('admin/welcome/peserta_custom') . '";
-    					</script>';
-    				}
-            else if (!$mail->Send() && $telegram)
-    				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengkonfirmasi Pelatihan Custom namun pesan email tidak terkirim");
-    					window.location="'. site_url('admin/welcome/peserta_custom') . '";
-    					</script>';
-    				}
-    				else if ($mail->Send() && $telegram)
+    				if($berhasil)
     				{
     					echo '<script>
     					alert("Anda Sudah Berhasil Mengkonfirmasi Pelatihan Custom");
-    					window.location="'. site_url('admin/welcome/peserta_custom') . '";
-    					</script>';
-    				}
-    				else if (!$mail->Send() && !$telegram)
-    				{
-    					echo '<script>
-    					alert("Anda Sudah Berhasil Mengkonfirmasi Pelatihan Custom namun pesan email dan telegram tidak terkirim");
     					window.location="'. site_url('admin/welcome/peserta_custom') . '";
     					</script>';
     				}
@@ -517,4 +538,77 @@ function unlock_kursus($id){
     $this->session->unset_userdata('Login');
     redirect('welcome','refresh');
   }
+  function ganti_password()
+   {
+     $data['title']="Ubah Password";
+     //$data['d_peserta']=$this->m_kursus->ambil();
+     $user = $this->session->userdata('username');
+     $this->data['pengguna'] = $this->m_login->data($user);
+     $data['pengguna'] = $this->m_login->data($user);
+     $this->load->view('admin/header',$this->data);
+     $this->load->view('admin/ganti_password', $data);
+     $this->load->view('admin/footer');
+   }
+
+   function ubah_password($id_user)
+    {
+      $password_lama=$this->input->post('password_lama');
+      $password_baru=$this->input->post('password_baru');
+      $password = md5($password_lama);
+      $berhasil = $this->m_kursus->cek_password_lama($id_user,$password,$password_baru);
+      if ($berhasil)
+      {
+        echo '<script>
+        alert("Anda Sudah Berhasil Melakukan Penggantian Password");
+        window.location="'. site_url('admin/welcome/index') . '";
+        </script>';
+      }
+      else {
+        echo '<script>
+        alert("Password lama anda salah, Anda Gagal dalam Melakukan Penggantian Password");
+        window.location="'. site_url('admin/welcome/ganti_password') . '";
+        </script>';
+      }
+    }
+    function cetak_kartu($id)
+    {
+      $data['dt_peserta'] = $this->m_kursus->select($id);
+      $user = $this->session->userdata('username');
+      $this->data['pengguna'] = $this->m_login->data($user);
+      $this->load->view('admin/header_report',$this->data);
+      $this->load->view('admin/kartu_peserta', $data);
+      $this->load->view('admin/footer');
+    }
+    function report_pemasukan()
+    {
+      $data['peserta'] = $this->m_kursus->get_peserta_report();
+      $data['total_pemasukan'] = $this->m_kursus->get_total_pemasukan();
+      $user = $this->session->userdata('username');
+      $this->data['pengguna'] = $this->m_login->data($user);
+      $this->load->view('admin/header_report_pemasukan',$this->data);
+      $this->load->view('admin/report_pemasukan', $data);
+      $this->load->view('admin/footer');
+    }
+
+    function form_report_pemasukan()
+    {
+      $user = $this->session->userdata('username');
+      $this->data['pengguna'] = $this->m_login->data($user);
+      $this->load->view('admin/header',$this->data);
+      $this->load->view('admin/form_report_pemasukan');
+      $this->load->view('admin/footer');
+    }
+
+    function report_pemasukan_tanggal()
+    {
+      $tgl_awal = $this->input->post('tgl_awal');
+      $tgl_akhir = $this->input->post('tgl_akhir');
+      $data['peserta'] = $this->m_kursus->get_peserta_report_tanggal($tgl_awal,$tgl_akhir);
+      $data['total_pemasukan'] = $this->m_kursus->get_total_pemasukan_tanggal($tgl_awal,$tgl_akhir);
+      $user = $this->session->userdata('username');
+      $this->data['pengguna'] = $this->m_login->data($user);
+      $this->load->view('admin/header_report_pemasukan',$this->data);
+      $this->load->view('admin/report_pemasukan', $data);
+      $this->load->view('admin/footer');
+    }
 }

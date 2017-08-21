@@ -15,7 +15,7 @@
                 </div>
             <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
+            <table class="table table-striped table-bordered table-hover" id="example">
             <thead>
                 <tr class="danger">
                     <th><b>No</b></th>
@@ -36,7 +36,7 @@
               <td><?php echo $b->nama_kursus?></td>
               <td><?php echo $b->laboratorium?></td>
               <td><?php echo $b->periode?></td>
-              <td><?php echo $b->harga?></td>
+              <td><?php echo 'Rp. ' . number_format($b->harga,0, ',' , '.');?></td>
               <td><?php echo $b->kuota?></td>
               <td><a href="<?php echo base_url();?>admin/welcome/ubah/<?php echo $b->id;?>" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></span></a>
               <a href="<?php echo base_url();?>admin/welcome/hapus/<?php echo $b->id;?>" onClick="return checkMe()" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-trash"></span></a>
@@ -57,3 +57,12 @@
             </div>
         </div>
     </div>
+    <script src="<?php echo base_url(); ?>assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+            <script type="text/javascript   ">
+                $(document).ready( function () {
+                    $('#example').DataTable();
+                    //$( 'a' ).imageLightbox();
+                } );
+
+            </script>

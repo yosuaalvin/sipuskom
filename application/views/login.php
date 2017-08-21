@@ -117,6 +117,7 @@ body {
 <div class="logo"></div>
 <div class="login-block">
         <form method="post" action="<?php echo base_url();?>admin/login/login_form">
+          <img style="display: block;margin-left: auto;margin-right: auto" src="<?php echo base_url(); ?>assets/images/logo-undip-black.png" width="300"><br>
                 <h1>Login</h1>
                 <p align="center"><font color=#424242> Halaman Admin</p></font>
                 <input type="text" name="username" placeholder="Username" id="username" size="20" class="inputan"/><?php echo form_error('username');?>

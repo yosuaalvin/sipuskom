@@ -59,6 +59,52 @@
 .login-block button{
 	background: #778899;
 }
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
 </style>
 <div class="container">
   <!-- Modal -->
@@ -115,39 +161,28 @@ $(document).ready(function(){
 </head>
 	<body>
 <!--header-->
-		<div class="header" id="home">
-			<nav class="navbar navbar-default">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"> </span>
-						<span class="icon-bar"> </span>
-						<span class="icon-bar"> </span>
-					</button>
-					<a class=navbar-header href="<?php echo base_url(); ?>welcome">
-          <img style="margin-top:10px" width="300" src="<?php echo base_url(); ?>assets/images/logo-undip.png"></img>
 
-					</div>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-							<ul class="nav navbar-nav navbar-right margin-top cl-effect-2">
-								<li><a href="<?php echo base_url(); ?>"><span data-hover="Home">Home</span></a></li>
-                <li><a href="<?php echo base_url(); ?>welcome/pendaftaran"><span data-hover="Pendaftaran">Pendaftaran</span></a></li>
-                <li><a href="<?php echo base_url(); ?>welcome/konfirmasi"><span data-hover="Konfirmasi">Konfirmasi</span></a></li>
-								<li><a href="<?php echo base_url(); ?>welcome/kursus"><span data-hover="Pelatihan">Pelatihan</span></a></li>
-								<!--<li><a href="<?php echo base_url(); ?>welcome/workshop"><span data-hover="Wrokshop">Workshop</span></a></li>-->
-								<!--<li><a href="<?php echo base_url(); ?>welcome/prosedur"><span data-hover="Prosedur">Prosedur</span></a></li>-->
-								<!--<li><a href="<?php echo base_url(); ?>welcome/profil"><span data-hover="Profil">Profil</span></a></li>-->
-								<li><a href="#myModal" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-							</ul>
-							<div class="clearfix"> </div>
-						</div><!-- /.navbar-collapse -->
-				<!-- /.container-fluid -->
+<div class="topnav" id="myTopnav">
+  <a href="<?php echo base_url(); ?>"><img width="300" src="<?php echo base_url(); ?>assets/images/logo-undip.png"></img></a>
+  <a style="margin-top:15px" href="<?php echo base_url(); ?>welcome/pendaftaran"><span data-hover="Pendaftaran">Pendaftaran</span></a>
+  <a style="margin-top:15px" href="<?php echo base_url(); ?>welcome/konfirmasi"><span data-hover="Konfirmasi">Konfirmasi</span></a>
+  <a style="margin-top:15px" href="<?php echo base_url(); ?>welcome/kursus"><span data-hover="Pelatihan">Pelatihan</span></a>
+  <a style="margin-top:15px" href="<?php echo base_url(); ?>welcome/lupa_password"><span data-hover="Pelatihan">Lupa Password</span></a>
 
-					    </div>
-			</nav>
+  <a class="navbar-right" style="margin-top:15px;margin-right:15px" href="#myModal" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+  <a style="margin-top:15px" href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+</div>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script>
 <!--/script-->
 		   <div class="clearfix"> </div>
 </div>

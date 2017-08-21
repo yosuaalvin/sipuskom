@@ -6,6 +6,7 @@
 <!-- Google Fonts -->
 <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <div class="container">
   <div class="row main">
@@ -57,7 +58,8 @@
           <div class="cols-sm-10">
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-money fa" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" name="harga_pelatihan" id="harga_pelatihan_value">
+              <input type="hidden" class="form-control" name="harga_pelatihan" id="harga_pelatihan_value">
+              <input type="text" class="form-control" name="harga_pelatihan_tampilan" id="harga_pelatihan_angka">
             </div>
           </div>
         </div>
@@ -103,6 +105,7 @@
         </div>
 
               <p>Buka Telegram messenger. Cari akun @uptpuskom_bot. Tekan tombol /start untuk memperoleh chat ID Anda.</p>
+              <p>Bila anda tidak memiliki telegram maka field ini bisa dikosongkan.</p>
               <center><img src="<?php echo base_url();?>assets/images/telegram.gif"/></center><br/>
               <div class="form-group">
                 <label for="chat_id" class="cols-sm-2 control-label">Telegram Chat ID</label>
@@ -191,6 +194,7 @@
           </div>
         </div>
         <input id="custom" type="hidden" name="custom" value="1">
+        <div align="center" class="g-recaptcha" data-sitekey="6LebdC0UAAAAAKPNiB6Ob7UaLOZ2kTD4NG2Frflp"></div>
 
         <div class="form-group ">
         <input type="submit" class="btn btn-primary btn-lg btn-block login-button" value="Register" name="submit"/>
@@ -295,6 +299,17 @@
 <script src="<?php echo base_url();?>assets/js/jquery-1.11.2.min.js"></script>
 
 <script type="text/javascript">
+function toRp(angka){
+    var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+    var rev2    = '';
+    for(var i = 0; i < rev.length; i++){
+        rev2  += rev[i];
+        if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+            rev2 += '.';
+        }
+    }
+    return 'Rp. ' + rev2.split('').reverse().join('');
+}
 $(document).ready(function() {
         $('select').change(function() {
             var option = $(this).val();
@@ -314,7 +329,10 @@ $(document).ready(function() {
                 stringify = JSON.parse(object);
                 for (var i = 0; i < stringify.length; i++) {
                   harga = stringify[i]['harga'];
+                  angka = toRp(harga);
                 }
+                document.getElementById('harga_pelatihan_angka').value = angka;
+
                 document.getElementById('harga_pelatihan_value').value = harga;
             }
             });

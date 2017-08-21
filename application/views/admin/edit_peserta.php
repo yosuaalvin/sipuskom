@@ -20,7 +20,7 @@
                         <tr>
                             <th>Nama</th>
                             <th>:</th>
-                            <th><input type="text" name="nama" value="<?php echo $peserta->nama?>"></th>
+                            <th><input size="50" type="text" name="nama" value="<?php echo $peserta->nama?>"></th>
                         </tr>
                         <tr>
                             <th>Institusi</th>

@@ -56,14 +56,14 @@
 });
 </script>
 <script src="<?php echo base_url();?>assets/js/jquery.dataTables.min.js"></script>
-    <script src="<?php echo base_url();?>assets/js/dataTables.bootstrap.js"></script>
+    <!--<script src="<?php echo base_url();?>assets/js/dataTables.bootstrap.js"></script>-->
 
         <script type="text/javascript   ">
             $(document).ready( function () {
                 $('#example').DataTable();
-                $( 'a' ).imageLightbox();
+                //$( 'a' ).imageLightbox();
                 $('#example1').DataTable();
-                $( 'a' ).imageLightbox();
+                //$( 'a' ).imageLightbox();
             } );
 
         </script>

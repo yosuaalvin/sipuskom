@@ -23,6 +23,11 @@
                             <th><input type="text" name="nama" value="<?php echo $peserta->nama?>"></th>
                         </tr>
                         <tr>
+                            <th>Email</th>
+                            <th>:</th>
+                            <th><input type="text" name="email" value="<?php echo $peserta->email?>"></th>
+                        </tr>
+                        <tr>
                             <th>Institusi</th>
                             <th>:</th>
                             <th><input type="text" name="institusi" value="<?php echo $peserta->institusi?>"></th>
@@ -35,12 +40,18 @@
                         <tr>
                             <th>Harga Pelatihan</th>
                             <th>:</th>
-                            <th><input type="text" name="harga_pelatihan" value="<?php echo $peserta->harga_pelatihan?>"></th>
+                            <input type="hidden" name="harga_pelatihan" value="<?php echo $peserta->harga_pelatihan?>">
+                            <th><input type="text" name="harga_pelatihan_tampil" value="<?php echo 'Rp. ' . number_format($peserta->harga_pelatihan,0, ',' , '.')?>"></th>
                         </tr>
                         <tr>
                             <th>Jumlah Peserta</th>
                             <th>:</th>
                             <th><input type="text" name="kuota" value="<?php echo $peserta->kuota?>"></th>
+                        </tr>
+                        <tr>
+                            <th>Total Biaya</th>
+                            <th>:</th>
+                            <th><input type="text" name="total_biaya" value="<?php echo 'Rp. ' . number_format($peserta->harga_pelatihan*$peserta->kuota,0, ',' , '.')?>"></th>
                         </tr>
                         <tr>
                             <th>Periode</th>

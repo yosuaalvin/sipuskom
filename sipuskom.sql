@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 08, 2017 at 11:21 AM
+-- Generation Time: Aug 21, 2017 at 05:51 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -50,7 +50,7 @@ CREATE TABLE `kursus` (
   `id` int(2) NOT NULL,
   `nama_kursus` varchar(50) DEFAULT NULL,
   `laboratorium` varchar(30) NOT NULL,
-  `harga` varchar(10) NOT NULL,
+  `harga` double(20,2) NOT NULL,
   `periode` date NOT NULL,
   `kuota` int(2) NOT NULL,
   `status` int(1) NOT NULL
@@ -61,10 +61,10 @@ CREATE TABLE `kursus` (
 --
 
 INSERT INTO `kursus` (`id`, `nama_kursus`, `laboratorium`, `harga`, `periode`, `kuota`, `status`) VALUES
-(1, 'Make an Easy Web With Framework CodeIgniter', 'Pengembangan Internet', 'Rp 500.000', '2016-07-24', 15, 0),
-(2, 'PHP and MySQL for Web Application Development', 'Pengembangan Internet', 'Rp 400.000', '2016-07-31', 18, 0),
-(3, 'Microsoft Visual Basic .NET for Beginner', 'Aplikasi dan Pemrograman', 'Rp 400.000', '2016-08-14', 16, 0),
-(17, 'Code Igniter ', 'Pengembangan Internet', 'Rp 400.000', '2016-06-15', 0, 1);
+(1, 'Make an Easy Web With Framework CodeIgniter', 'Pengembangan Internet', 500000.00, '2016-07-24', 14, 0),
+(2, 'PHP and MySQL for Web Application Development', 'Pengembangan Internet', 1000000.00, '2016-07-31', 18, 0),
+(3, 'Microsoft Visual Basic .NET for Beginner', 'Aplikasi dan Pemrograman', 1500000.00, '2016-08-14', 16, 0),
+(17, 'Code Igniter ', 'Pengembangan Internet', 1000000.00, '2016-06-15', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,8 @@ CREATE TABLE `laboratorium` (
 --
 
 INSERT INTO `laboratorium` (`id_lab`, `nama_lab`) VALUES
-(1, 'Software Engineering');
+(1, 'Software Engineering'),
+(2, 'Jaringan Komputer');
 
 -- --------------------------------------------------------
 
@@ -114,10 +115,9 @@ INSERT INTO `pertanyaan` (`id_pertanyaan`, `isi_pertanyaan`) VALUES
 
 CREATE TABLE `peserta` (
   `id` int(11) NOT NULL,
-  `npm` varchar(8) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `nm_kursus` varchar(50) NOT NULL,
-  `harga_pelatihan` varchar(10) NOT NULL,
+  `harga_pelatihan` double(20,2) NOT NULL,
   `periode` date NOT NULL,
   `kuota` int(2) NOT NULL,
   `id_user` int(3) NOT NULL,
@@ -132,15 +132,36 @@ CREATE TABLE `peserta` (
   `custom` varchar(2) NOT NULL,
   `id_pembayaran` varchar(50) NOT NULL,
   `no_transaksi` varchar(50) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '0'
+  `status` int(1) NOT NULL DEFAULT '0',
+  `tgl_pembuatan` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `peserta`
 --
 
-INSERT INTO `peserta` (`id`, `npm`, `nama`, `nm_kursus`, `harga_pelatihan`, `periode`, `kuota`, `id_user`, `id_kursus`, `institusi`, `alamat`, `no_telp`, `tempat_lahir`, `tanggal_lahir`, `email`, `chat_id`, `custom`, `id_pembayaran`, `no_transaksi`, `status`) VALUES
-(6, 'semarang', 'YOSUA ALVIN ADI SOETRISNO', 'Make an Easy Web With Framework CodeIgniter', 'Rp 500.000', '2017-08-30', 20, 5, 1, 'UNDIP', 'Jl. Anggrek VII/1', '085742380797', 'Semarang', '1990-10-13', 'yosuaalvin@yahoo.com', '293078439', '0', '', '', 1);
+INSERT INTO `peserta` (`id`, `nama`, `nm_kursus`, `harga_pelatihan`, `periode`, `kuota`, `id_user`, `id_kursus`, `institusi`, `alamat`, `no_telp`, `tempat_lahir`, `tanggal_lahir`, `email`, `chat_id`, `custom`, `id_pembayaran`, `no_transaksi`, `status`, `tgl_pembuatan`) VALUES
+(18, 'Yosua Alvin Adi Soetrisno', 'Pelatihan Python', 500000.00, '2017-08-30', 10, 14, 0, 'UNDIP', 'Jl. Anggrek VII/1 Semarang', '085742380797', 'Semarang', '1990-10-13', 'yosuaalvin@yahoo.com', '293078439', '1', 'edaf', '', 0, '2017-08-21 17:06:34'),
+(17, 'Yosua Alvin Adi Soetrisno', 'Make an Easy Web With Framework CodeIgniter', 500000.00, '2017-08-30', 10, 14, 1, 'UNDIP', 'Jl. Anggrek VII/1 Semarang', '085742380797', 'Semarang', '1990-10-13', 'yosuaalvin@yahoo.com', '293078439', '0', '1eac', '1241213123124123', 1, '2017-08-21 11:26:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rekening`
+--
+
+CREATE TABLE `rekening` (
+  `id_akun` int(11) NOT NULL,
+  `no_rekening` varchar(20) NOT NULL,
+  `bank` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rekening`
+--
+
+INSERT INTO `rekening` (`id_akun`, `no_rekening`, `bank`) VALUES
+(2, '123129310231', 'Mandiri');
 
 -- --------------------------------------------------------
 
@@ -153,7 +174,7 @@ CREATE TABLE `tb_pengguna` (
   `username` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
   `nama` varchar(100) DEFAULT NULL,
-  `npm` varchar(8) NOT NULL,
+  `npm` varchar(32) NOT NULL,
   `level` int(1) NOT NULL,
   `status` int(1) NOT NULL,
   `id_pertanyaan` int(11) NOT NULL,
@@ -165,8 +186,8 @@ CREATE TABLE `tb_pengguna` (
 --
 
 INSERT INTO `tb_pengguna` (`id_user`, `username`, `password`, `nama`, `npm`, `level`, `status`, `id_pertanyaan`, `jawaban_pertanyaan`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', '12345678', 2, 1, 0, ''),
-(5, 'yosuaalvin@yahoo.com', '01c4bf6ba816ef53c34e057af258f76f', 'Yosua Alvin Adi Soetrisno', 'semarang', 1, 1, 1, 'Esther');
+(14, 'yosuaalvin@yahoo.com', '01c4bf6ba816ef53c34e057af258f76f', 'Yosua Alvin Adi Soetrisno', 'semarang', 1, 1, 1, 'Esther'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', '12345678', 2, 1, 0, '');
 
 --
 -- Indexes for dumped tables
@@ -203,6 +224,12 @@ ALTER TABLE `peserta`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rekening`
+--
+ALTER TABLE `rekening`
+  ADD PRIMARY KEY (`id_akun`);
+
+--
 -- Indexes for table `tb_pengguna`
 --
 ALTER TABLE `tb_pengguna`
@@ -227,7 +254,7 @@ ALTER TABLE `kursus`
 -- AUTO_INCREMENT for table `laboratorium`
 --
 ALTER TABLE `laboratorium`
-  MODIFY `id_lab` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_lab` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `pertanyaan`
 --
@@ -237,12 +264,17 @@ ALTER TABLE `pertanyaan`
 -- AUTO_INCREMENT for table `peserta`
 --
 ALTER TABLE `peserta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT for table `rekening`
+--
+ALTER TABLE `rekening`
+  MODIFY `id_akun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tb_pengguna`
 --
 ALTER TABLE `tb_pengguna`
-  MODIFY `id_user` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

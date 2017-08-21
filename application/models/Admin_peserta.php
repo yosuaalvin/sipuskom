@@ -22,7 +22,10 @@ function selectAkunSosial()
 	$this->db->order_by("id_akun","asc");
 	return $this->db->get('akun_sosial')->result();
 }
-
+function selectRekening()
+{
+	return $this->db->get('rekening')->result();
+}
 function tambah_peserta($npm,$nama,$nm_kursus,$periode,$kelas,$jurusan)
 {
 	$data = array(

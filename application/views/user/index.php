@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href= "<?php echo base_url(); ?>user/welcome/konfirmasi">
+                        <a href= "<?php echo base_url(); ?>user/welcome/daftar_peserta_kursus">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
