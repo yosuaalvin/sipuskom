@@ -194,7 +194,7 @@ class Welcome extends CI_Controller {
         $alamat=$this->input->post('alamat');
         $no_telp=$this->input->post('no_telp');
         $custom=1;
-        $id_pembayaran = substr(md5(uniqid(rand(), true)), 16, 16);
+        $id_pembayaran = substr(md5(uniqid(rand(), true)), 4, 4);
         $berhasil = $this->m_kursus->tambah_peserta_pelatihan_baru_custom($nama,$institusi,$nm_kursus,$kuota,$periode,$email,$chat_id,$tempat_lahir,$tanggal_lahir,$alamat,$no_telp,$id_pembayaran,$custom);
         if ($berhasil)
 				{
