@@ -357,6 +357,7 @@ class Welcome extends CI_Controller {
 					$nm_kursus = $peserta['nm_kursus'];
 					$periode = $peserta['periode'];
 					$chat_id = $peserta['chat_id'];
+          $email = $peserta['email'];
 				}
 				$messagedikirim = 'Terima Kasih '.$nm_peserta.' Telah Melakukan Verifikasi Pembayaran dengan ID ' . $id_pembayaran . ' dengan No. Transaksi ' . $no_transaksi . ' untuk Pelatihan ' . $nm_kursus . ' untuk tanggal ' . $periode . '. Silahkan menunggu email konfirmasi dari kami yang berisi notifikasi bahwa anda sudah bisa login ke sistem kami.';
 
